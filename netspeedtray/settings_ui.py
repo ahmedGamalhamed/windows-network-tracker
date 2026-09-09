@@ -182,26 +182,26 @@ class SettingsWindow(ctk.CTkToplevel):
 
     def _build_display(self) -> None:
         frame = self._scroll("Display")
-        self._switch(frame, "Show speeds on the taskbar overlay", "show_overlay", True)
+        self._switch(frame, "Show speeds on the taskbar", "show_overlay", True)
         self._switch(frame, "Show speeds in the system tray icon", "show_tray", True)
         self._switch(frame, "Open the details window when the tray icon is clicked", "show_details_on_click", True)
-        self._combo(frame, "Overlay layout", "overlay_layout", LAYOUTS, "stacked")
-        self._combo(frame, "Overlay dock", "overlay_dock", DOCKS, "taskbar-tray")
+        self._combo(frame, "Taskbar layout", "overlay_layout", LAYOUTS, "stacked")
+        self._combo(frame, "Taskbar position", "overlay_dock", DOCKS, "taskbar-tray")
         self._combo(frame, "Tray icon style", "tray_style", TRAY_STYLES, "text")
-        self._switch(frame, "Always keep overlay on top", "overlay_always_on_top", True)
-        self._switch(frame, "Allow dragging the overlay", "overlay_draggable", True)
-        self._switch(frame, "Lock overlay position", "overlay_lock_position", False)
-        self._switch(frame, "Click-through overlay", "overlay_click_through", False)
-        self._switch(frame, "Hide overlay during fullscreen apps / games", "overlay_hide_fullscreen", True)
-        self._switch(frame, "Show adapter name on overlay", "overlay_show_adapter", False)
+        self._switch(frame, "Transparent background", "overlay_transparent_background", True)
+        self._switch(frame, "Allow dragging along the taskbar", "overlay_draggable", True)
+        self._switch(frame, "Lock position", "overlay_lock_position", False)
+        self._switch(frame, "Click-through (ignore mouse)", "overlay_click_through", False)
+        self._switch(frame, "Hide during fullscreen apps / games", "overlay_hide_fullscreen", True)
+        self._switch(frame, "Show adapter name", "overlay_show_adapter", False)
         self._switch(frame, "Show Down/Up labels", "overlay_show_labels", True)
         self._switch(frame, "Show arrows", "overlay_show_arrows", True)
-        self._switch(frame, "Show session totals on overlay", "overlay_show_totals", False)
-        self._switch(frame, "Show today's usage on overlay", "overlay_show_usage", True)
-        self._switch(frame, "Show ping on overlay", "overlay_show_ping", False)
-        self._switch(frame, "Show link utilization on overlay", "overlay_show_utilization", False)
+        self._switch(frame, "Show session totals", "overlay_show_totals", False)
+        self._switch(frame, "Show today's usage", "overlay_show_usage", True)
+        self._switch(frame, "Show ping", "overlay_show_ping", False)
+        self._switch(frame, "Show link utilization", "overlay_show_utilization", False)
         self._switch(frame, "Show units on the tray icon", "tray_show_units", False)
-        self._slider(frame, "Overlay opacity", "overlay_opacity", 0.94, 0.4, 1.0, lambda v: f"{v:.0%}")
+        self._slider(frame, "Opacity (when background is solid)", "overlay_opacity", 1.0, 0.4, 1.0, lambda v: f"{v:.0%}")
         self._combo(frame, "Graph history (seconds)", "graph_history_seconds", ["30", "60", "120", "180", "300"], "60")
         self._switch(frame, "Fill area under the details graph", "graph_fill", True)
 
@@ -301,6 +301,7 @@ class SettingsWindow(ctk.CTkToplevel):
             "overlay_layout": settings.overlay_layout,
             "overlay_dock": settings.overlay_dock,
             "tray_style": settings.tray_style,
+            "overlay_transparent_background": settings.overlay_transparent_background,
             "overlay_always_on_top": settings.overlay_always_on_top,
             "overlay_draggable": settings.overlay_draggable,
             "overlay_lock_position": settings.overlay_lock_position,
@@ -383,7 +384,8 @@ class SettingsWindow(ctk.CTkToplevel):
         s.overlay_layout = gets("overlay_layout")
         s.overlay_dock = gets("overlay_dock")
         s.tray_style = gets("tray_style")
-        s.overlay_always_on_top = getb("overlay_always_on_top")
+        s.overlay_transparent_background = getb("overlay_transparent_background")
+        s.overlay_always_on_top = getb("overlay_always_on_top") if "overlay_always_on_top" in self._vars else False
         s.overlay_draggable = getb("overlay_draggable")
         s.overlay_lock_position = getb("overlay_lock_position")
         s.overlay_click_through = getb("overlay_click_through")

@@ -77,17 +77,18 @@ class Settings:
     overlay_dock: str = "taskbar-tray"  # taskbar-tray | taskbar-left | taskbar-center | taskbar-right | custom
     overlay_x: int = 0
     overlay_y: int = 0
-    overlay_opacity: float = 0.94
-    overlay_always_on_top: bool = True
+    overlay_opacity: float = 1.0
+    overlay_transparent_background: bool = True
+    overlay_always_on_top: bool = False
     overlay_click_through: bool = False
     overlay_draggable: bool = True
     overlay_hide_fullscreen: bool = True
     overlay_lock_position: bool = False
-    overlay_show_labels: bool = True
+    overlay_show_labels: bool = False
     overlay_show_arrows: bool = True
     overlay_show_adapter: bool = False
     overlay_show_totals: bool = False
-    overlay_show_usage: bool = True
+    overlay_show_usage: bool = False
     overlay_show_ping: bool = False
     overlay_show_utilization: bool = False
     overlay_font_family: str = "Segoe UI"
@@ -111,7 +112,7 @@ class Settings:
     decimal_places: int = 1
     min_display_unit: str = "KB"
 
-    tray_style: str = "text"  # text | arrows | bars | graph
+    tray_style: str = "arrows"  # text | arrows | bars | graph
     tray_show_units: bool = False
 
     graph_history_seconds: int = 60

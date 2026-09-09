@@ -43,6 +43,44 @@ def format_rate(bytes_per_second: float, settings) -> str:
     return f"{scaled:.{places}f} {labels[index]}{suffix}"
 
 
+def format_overlay_rate(bytes_per_second: float, settings) -> tuple[str, str]:
+    value = max(0.0, float(bytes_per_second))
+    if settings.use_bits:
+        value *= 8
+        labels = BIT_LABELS
+        suffix = "/s"
+    else:
+        labels = UNIT_LABELS
+        suffix = "/s"
+
+    base = 1024.0 if settings.binary_units else 1000.0
+    places = max(0, min(3, int(settings.decimal_places)))
+    scale = settings.unit_scale
+    min_unit = settings.min_display_unit if settings.min_display_unit in UNIT_LABELS else "B"
+    min_index = UNIT_LABELS.index(min_unit)
+
+    if scale != "auto" and scale in UNIT_LABELS:
+        index = UNIT_LABELS.index(scale)
+        scaled = value / (base ** index)
+    else:
+        index = 0
+        scaled = value
+        while scaled >= base and index < len(labels) - 1:
+            scaled /= base
+            index += 1
+        if index < min_index:
+            scaled = value / (base ** min_index)
+            index = min_index
+        while scaled >= 1000 and index < len(labels) - 1:
+            scaled /= base
+            index += 1
+
+    number_width = 3 + (places + 1 if places else 0)
+    number = f"{scaled:.{places}f}".rjust(number_width)
+    unit = f"{labels[index]}{suffix}".ljust(4)
+    return number, unit
+
+
 def format_compact_rate(bytes_per_second: float, settings) -> str:
     text = format_rate(bytes_per_second, settings)
     if not settings.tray_show_units:

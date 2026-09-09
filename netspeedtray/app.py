@@ -219,6 +219,10 @@ class NetSpeedApp(ctk.CTk):
 
 def main() -> None:
     set_dpi_aware()
+    try:
+        ctk.deactivate_automatic_dpi_awareness()
+    except Exception:
+        pass
     if not single_instance():
         return
     app = NetSpeedApp()
